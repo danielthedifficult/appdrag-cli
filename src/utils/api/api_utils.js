@@ -153,6 +153,7 @@ const apiJson = (api, appId) => {
 }
 
 const pushFunctions = async (appId, token, currFolder, basePath, folders) => {
+  // iterate through folders. Each folder should represent a function and be named after the function ID
   for (let x = 0; x < folders.length; x++) {
     folder = folders[x];
     let zipPath = `${appId}_${folder}.zip`;

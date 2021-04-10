@@ -11,6 +11,8 @@ const pushApi = async (args, argOpts) => {
   let token = tokenObj.token;
   let basePath = 'CloudBackend/code/';
   let folders = fs.readdirSync(basePath);
+
+  // If there is a function ID specified, use that as the base folder name
   if (args[0]) {
     if (folders.includes(args[0])) {
       folders = [...args[0]];

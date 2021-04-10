@@ -36,10 +36,15 @@ async function main() {
   }
   delete argv._;
   const argOpts = argv;
+
+  // Check to see if the command (login, init, fs, api, etc.) exists
   if (funcs.hasOwnProperty(args[0])){
+    // Check to see a sub-command (push, pull) exists
     if (funcs[args[0]].hasOwnProperty(args[1])) {
+      // Run the command, sub-command, and only include first 2 arguments.
       funcs[args[0]][args[1]](args.slice(2), argOpts);
     } else if (funcs[args[0]].length !== undefined) {
+      // Run the command, only include first argument.
       funcs[args[0]](args.slice(1), argOpts);
     } else {
       console.log(chalk.red(
