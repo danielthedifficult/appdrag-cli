@@ -1,5 +1,5 @@
-const { setupCheck, config, currFolder, refreshToken, tokenObj } = require('../../utils/common');
-const { getFunctionsList, parseFunctions, writeScriptFile, apiJson, pushFunctions } = require('../../utils/api/api');
+const { setupCheck, config, currFolder, refreshToken, tokenObj } = require('../../utils/common_utils.js');
+const { getFunctionsList, parseFunctions, writeScriptFile, apiJson, pushFunctions } = require('../../utils/api/api_utils');
 const fs = require('fs');
 const chalk = require('chalk');
 
@@ -10,8 +10,10 @@ const pushApi = async (args, argOpts) => {
   }
   let token = tokenObj.token;
   let basePath = 'CloudBackend/code/';
-  let folders = fs.readdirSync(basePath);
-
+  let folders = fs.readdirSync(basePath, {withFileTypes : true})
+  .filter(list => list.isDirectory())
+  .map(item => item.name);
+  console.log("FOLDERS:",folders)
   // If there is a function ID specified, use that as the base folder name
   if (args[0]) {
     if (folders.includes(args[0])) {

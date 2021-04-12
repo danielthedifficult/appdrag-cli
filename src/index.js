@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 const chalk = require('chalk');
-const { config } = require('./utils/common_utils.js.js');
+const { config } = require('./utils/common_utils.js');
 const { login, init } = require('./commands/setup/setup_commands.js');
 const { pushFilesystem, pullFilesystem } = require('./commands/filesystem/filesystem_commands.js');
 const { pushApi, pullApi } = require('./commands/api/api_commands.js');
