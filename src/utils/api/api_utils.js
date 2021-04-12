@@ -1,5 +1,5 @@
-const { createZip, getSignedURL, pushToAwsS3 } = require('../../utils/filesystem/filesystem');
-const { refreshToken, config, tokenObj } = require('../../utils/common');
+const { createZip, getSignedURL, pushToAwsS3 } = require('../../utils/filesystem/filesystem_utils');
+const { refreshToken, config, tokenObj } = require('../../utils/common_utils');
 const fetch = require('node-fetch');
 const fs = require('fs');
 const unzipper = require('unzipper');
@@ -156,7 +156,8 @@ const pushFunctions = async (appId, token, currFolder, basePath, folders) => {
   // iterate through folders. Each folder should represent a function and be named after the function ID
   for (let x = 0; x < folders.length; x++) {
     folder = folders[x];
-    let zipPath = `${appId}_${folder}.zip`;
+    let functionID = folder.match(/[0-9]{6,8}/g); // Extract functionID from folder name in case it was renamed
+    let zipPath = `${appId}_${functionID}.zip`;
     let folderPath = basePath+folder;
     let zipErr = await createZip(folderPath, zipPath, currFolder);
     if (zipErr) {
@@ -193,13 +194,20 @@ const pushFunctions = async (appId, token, currFolder, basePath, folders) => {
   }
 }
 
-const restoreCloudBackendFunction = async (appId, token, folder) => {
+/**
+ * 
+ * @param {string} appId of AppDrag project
+ * @param {string} token valid token used to authenticate with AppDrag CloudBackend
+ * @param {*} functionID the ID of the function to restore 
+ * @returns 
+ */
+const restoreCloudBackendFunction = async (appId, token, functionID) => {
   let data = {
     command: 'CloudAPIRestoreAPI',
     token: token,
     appID: appId,
     version: '',
-    functionID: folder,
+    functionID: functionID,
   };
   var opts = {
     method: 'POST', // *GET, POST, PUT, DELETE, etc.
