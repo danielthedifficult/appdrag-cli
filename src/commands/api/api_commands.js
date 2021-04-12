@@ -10,8 +10,10 @@ const pushApi = async (args, argOpts) => {
   }
   let token = tokenObj.token;
   let basePath = 'CloudBackend/code/';
-  let folders = fs.readdirSync(basePath);
-
+  let folders = fs.readdirSync(basePath, {withFileTypes : true})
+  .filter(list => list.isDirectory())
+  .map(item => item.name);
+  
   // If there is a function ID specified, use that as the base folder name
   if (args[0]) {
     if (folders.includes(args[0])) {

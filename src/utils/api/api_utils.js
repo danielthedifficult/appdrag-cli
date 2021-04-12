@@ -31,7 +31,7 @@ const parseFunctions = async (token, appId, funcs) => {
   }
 
   for(let x = 0; x < funcs.length; x++) {
-    let newPath = `CloudBackend/code/${funcs[x].id}`;
+    let newPath = `CloudBackend/code/${funcs[x].name + "_" + funcs[x].id}`;
     if (funcs[x].type !== 'FOLDER') {
       if (!fs.existsSync(newPath)) {
         fs.mkdirSync(newPath);
@@ -154,9 +154,12 @@ const apiJson = (api, appId) => {
 
 const pushFunctions = async (appId, token, currFolder, basePath, folders) => {
   // iterate through folders. Each folder should represent a function and be named after the function ID
+  console.log("Looping through",folders)
   for (let x = 0; x < folders.length; x++) {
     folder = folders[x];
-    let zipPath = `${appId}_${folder}.zip`;
+    console.log("Pushing",folder)
+    let functionID = folder.match(/[0-9]{6,8}/g); // Extract functionID from folder name in case it was renamed
+    let zipPath = `${appId}_${functionID}.zip`;
     let folderPath = basePath+folder;
     let zipErr = await createZip(folderPath, zipPath, currFolder);
     if (zipErr) {
@@ -184,7 +187,7 @@ const pushFunctions = async (appId, token, currFolder, basePath, folders) => {
     console.log(chalk.blue('Pushing...'));
     await pushToAwsS3(fileContent, fileSizeInBytes, url);
     console.log(chalk.blue('Restoring...'));
-    let response = await restoreCloudBackendFunction(appId, token, folder);
+    let response = await restoreCloudBackendFunction(appId, token, functionID);
     if (response.status == 'OK') {
       fs.unlinkSync(zipPath);
       console.log(chalk.green(`${folder} has been updated !`));
@@ -194,13 +197,13 @@ const pushFunctions = async (appId, token, currFolder, basePath, folders) => {
   }
 }
 
-const restoreCloudBackendFunction = async (appId, token, folder) => {
+const restoreCloudBackendFunction = async (appId, token, functionID) => {
   let data = {
     command: 'CloudAPIRestoreAPI',
     token: token,
     appID: appId,
     version: '',
-    functionID: folder,
+    functionID: functionID,
   };
   var opts = {
     method: 'POST', // *GET, POST, PUT, DELETE, etc.
