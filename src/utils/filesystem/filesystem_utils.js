@@ -2,16 +2,8 @@ const fetch = require('node-fetch');
 const fs = require('fs');
 const archiver = require('archiver');
 const chalk = require('chalk')
-const { config, refreshToken, tokenObj, downloadFile } = require('../common_utils')
+const { config, refreshToken, tokenObj, downloadFile } = require('../common_utils.js')
 
-/**
- * createZip
- * Creates a zip for the given folder, path, and cwd
- * @param {string} sourceFolder 
- * @param {string} zipPath 
- * @param {string} currFolder 
- * @returns null or Error
- */
 const createZip = async (sourceFolder, zipPath, currFolder) => {
   let isErr = false;
   await zipFolder(sourceFolder, zipPath, currFolder).catch((err) => {

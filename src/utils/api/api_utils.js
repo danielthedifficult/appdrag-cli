@@ -1,5 +1,5 @@
-const { createZip, getSignedURL, pushToAwsS3 } = require('../../utils/filesystem/filesystem_utils');
-const { refreshToken, config, tokenObj } = require('../../utils/common_utils');
+const { createZip, getSignedURL, pushToAwsS3 } = require('../../utils/filesystem/filesystem_utils.js');
+const { refreshToken, config, tokenObj } = require('../../utils/common_utils.js');
 const fetch = require('node-fetch');
 const fs = require('fs');
 const unzipper = require('unzipper');
@@ -156,8 +156,7 @@ const pushFunctions = async (appId, token, currFolder, basePath, folders) => {
   // iterate through folders. Each folder should represent a function and be named after the function ID
   for (let x = 0; x < folders.length; x++) {
     folder = folders[x];
-    let functionID = folder.match(/[0-9]{6,8}/g); // Extract functionID from folder name in case it was renamed
-    let zipPath = `${appId}_${functionID}.zip`;
+    let zipPath = `${appId}_${folder}.zip`;
     let folderPath = basePath+folder;
     let zipErr = await createZip(folderPath, zipPath, currFolder);
     if (zipErr) {
@@ -184,6 +183,7 @@ const pushFunctions = async (appId, token, currFolder, basePath, folders) => {
     url = url.signedURL;
     console.log(chalk.blue('Pushing...'));
     await pushToAwsS3(fileContent, fileSizeInBytes, url);
+    console.log(chalk.blue('Restoring...'));
     let response = await restoreCloudBackendFunction(appId, token, folder);
     if (response.status == 'OK') {
       fs.unlinkSync(zipPath);
@@ -194,29 +194,30 @@ const pushFunctions = async (appId, token, currFolder, basePath, folders) => {
   }
 }
 
-/**
- * 
- * @param {string} appId of AppDrag project
- * @param {string} token valid token used to authenticate with AppDrag CloudBackend
- * @param {*} functionID the ID of the function to restore 
- * @returns 
- */
-const restoreCloudBackendFunction = async (appId, token, functionID) => {
+const restoreCloudBackendFunction = async (appId, token, folder) => {
   let data = {
     command: 'CloudAPIRestoreAPI',
     token: token,
     appID: appId,
     version: '',
-    functionID: functionID,
+    functionID: folder,
   };
   var opts = {
     method: 'POST', // *GET, POST, PUT, DELETE, etc.
     headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' },
     body: new URLSearchParams(data),
   };
+  
   let response = await fetch('https://api.appdrag.com/CloudBackend.aspx', opts);
-  return await response.json();
-
+  response = await response.text(); // Write to text first so can try parsing without consuming the stream
+  try {
+    response = JSON.parse(response);
+    return response;
+  } catch (e) {
+    console.error(chalk.red("Could not parse response from server:"))
+    console.warn(chalk.yellow(response))
+    throw new Error(e);
+  }
 }
 
 module.exports = { getFunctionsList, parseFunctions, writeScriptFile, apiJson, restoreCloudBackendFunction, pushFunctions }
