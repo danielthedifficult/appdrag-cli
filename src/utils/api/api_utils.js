@@ -183,6 +183,7 @@ const pushFunctions = async (appId, token, currFolder, basePath, folders) => {
     url = url.signedURL;
     console.log(chalk.blue('Pushing...'));
     await pushToAwsS3(fileContent, fileSizeInBytes, url);
+    console.log(chalk.blue('Restoring...'));
     let response = await restoreCloudBackendFunction(appId, token, folder);
     if (response.status == 'OK') {
       fs.unlinkSync(zipPath);
@@ -206,9 +207,17 @@ const restoreCloudBackendFunction = async (appId, token, folder) => {
     headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' },
     body: new URLSearchParams(data),
   };
+  
   let response = await fetch('https://api.appdrag.com/CloudBackend.aspx', opts);
-  return await response.json();
-
+  response = await response.text(); // Write to text first so can try parsing without consuming the stream
+  try {
+    response = JSON.parse(response);
+    return response;
+  } catch (e) {
+    console.error(chalk.red("Could not parse response from server:"))
+    console.warn(chalk.yellow(response))
+    throw new Error(e);
+  }
 }
 
 module.exports = { getFunctionsList, parseFunctions, writeScriptFile, apiJson, restoreCloudBackendFunction, pushFunctions }
