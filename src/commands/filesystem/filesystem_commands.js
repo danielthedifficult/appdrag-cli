@@ -1,6 +1,6 @@
 const chalk = require('chalk')
-const { setupCheck, currFolder, config, refreshToken, tokenObj } = require('../../utils/common');
-const { createZip, pushFiles, getDirectoryListing, parseDirectory, pullSingleFile } =  require('../../utils/filesystem/filesystem')
+const { setupCheck, currFolder, config, refreshToken, tokenObj } = require('../../utils/common_utils');
+const { createZip, pushFiles, getDirectoryListing, parseDirectory, pullSingleFile } =  require('../../utils/filesystem/filesystem_utils')
 const Spinner = require('cli-spinner').Spinner;
 
 const pushFilesystem = async (args, argOpts) => {

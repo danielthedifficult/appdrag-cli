@@ -1,6 +1,6 @@
 const inquirer = require('inquirer');
 const fetch = require('node-fetch');
-const { config } = require ('../common');
+const { config } = require ('../common_utils');
 
 const loginPrompt = () => {
   const questions = [

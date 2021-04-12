@@ -1,5 +1,5 @@
-const { setupCheck, config, currFolder, refreshToken, tokenObj } = require('../../utils/common');
-const { getFunctionsList, parseFunctions, writeScriptFile, apiJson, pushFunctions } = require('../../utils/api/api');
+const { setupCheck, config, currFolder, refreshToken, tokenObj } = require('../../utils/common_utils.js');
+const { getFunctionsList, parseFunctions, writeScriptFile, apiJson, pushFunctions } = require('../../utils/api/api_utils.js');
 const fs = require('fs');
 const chalk = require('chalk');
 
