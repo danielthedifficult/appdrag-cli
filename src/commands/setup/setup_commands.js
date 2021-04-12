@@ -7,7 +7,7 @@ spinner.setSpinnerString(18);
 
 const chalk = require('chalk');
 const clear = require('clear');
-const { loginPrompt, requestLogin, codePrompt, storeUserInfo } = require('../../utils/setup/setup');
+const { loginPrompt, requestLogin, codePrompt, storeUserInfo } = require('../../utils/setup/setup_utils.js');
 
 const init = async (args) => {
   if (args.length <= 0) {

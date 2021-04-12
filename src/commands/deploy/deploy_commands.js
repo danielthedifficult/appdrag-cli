@@ -1,7 +1,7 @@
-const { getDirectoryListing } = require('../../utils/filesystem/filesystem');
-const { getFunctionsList, apiJson, writeScriptFile } = require('../../utils/api/api');
-const { parseDirectory, parseHtmlFiles, downloadResources, deployCloudBackend, downloadDb, appConfigJson, flattenFunctionList } = require('../../utils/deploy/deploy');
-const { setupCheck, currFolder, config, refreshToken, tokenObj } = require('../../utils/common');
+const { getDirectoryListing } = require('../../utils/filesystem/filesystem_utils.js');
+const { getFunctionsList, apiJson, writeScriptFile } = require('../../utils/api/api_utils.js');
+const { parseDirectory, parseHtmlFiles, downloadResources, deployCloudBackend, downloadDb, appConfigJson, flattenFunctionList } = require('../../utils/deploy/deploy_utils.js');
+const { setupCheck, currFolder, config, refreshToken, tokenObj } = require('../../utils/common_utils.js');
 const fs = require('fs');
 const chalk = require('chalk');
 const util = require('util');

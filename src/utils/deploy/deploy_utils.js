@@ -1,9 +1,9 @@
-const { getDirectoryListing } =  require('../../utils/filesystem/filesystem')
+const { getDirectoryListing } =  require('../../utils/filesystem/filesystem_utils.js')
 const fetch = require('node-fetch');
 const unzipper = require('unzipper');
 const fs = require('fs');
 const chalk = require('chalk');
-const { downloadFile } = require('../../utils/common');
+const { downloadFile } = require('../../utils/common_utils.js');
 
 
 const parseDirectory = (token, appId, files, lastfile, currentPath) => {

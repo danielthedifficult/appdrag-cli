@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 const chalk = require('chalk');
-const { config } = require('./utils/common.js');
-const { login, init } = require('./commands/setup/setup');
-const { pushFilesystem, pullFilesystem } = require('./commands/filesystem/filesystem');
-const { pushApi, pullApi } = require('./commands/api/api');
-const { pullDatabase, pushDatabase } = require('./commands/database/database');
-const { deployFilesystem, deployApi, deployDb, exportProject } = require('./commands/deploy/deploy');
-const { setupCheck, help } = require('./utils/common');
+const { config } = require('./utils/common_utils.js.js');
+const { login, init } = require('./commands/setup/setup_commands.js');
+const { pushFilesystem, pullFilesystem } = require('./commands/filesystem/filesystem_commands.js');
+const { pushApi, pullApi } = require('./commands/api/api_commands.js');
+const { pullDatabase, pushDatabase } = require('./commands/database/database_commands.js');
+const { deployFilesystem, deployApi, deployDb, exportProject } = require('./commands/deploy/deploy_commands.js');
+const { setupCheck, help } = require('./utils/common_utils.js');
 var argv = require('minimist')(process.argv.slice(2));
 
 async function main() {

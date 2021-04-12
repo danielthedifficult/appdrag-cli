@@ -1,5 +1,5 @@
-const { createZip, getSignedURL, pushToAwsS3 } = require('../../utils/filesystem/filesystem');
-const { refreshToken, config, tokenObj } = require('../../utils/common');
+const { createZip, getSignedURL, pushToAwsS3 } = require('../../utils/filesystem/filesystem_utils.js');
+const { refreshToken, config, tokenObj } = require('../../utils/common_utils.js');
 const fetch = require('node-fetch');
 const fs = require('fs');
 const unzipper = require('unzipper');

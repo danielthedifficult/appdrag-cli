@@ -1,5 +1,5 @@
-const { setupCheck, tokenObj } = require('../../utils/common');
-const { downloadDb, pushDbToCloudBackend } = require('../../utils/database/database');
+const { setupCheck, tokenObj } = require('../../utils/common_utils.js');
+const { downloadDb, pushDbToCloudBackend } = require('../../utils/database/database_utils.js');
 const fs = require('fs');
 const chalk = require('chalk');
 
